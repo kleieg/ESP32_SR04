@@ -1,0 +1,70 @@
+<!DOCTYPE HTML><html>
+<head>
+  <title>ESP HC-SR04</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="icon"  type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+<body>
+  <div class="topnav">
+    <h1>ESP WEB SERVER - HC-SR04 sensor  V1.1</h1>
+  </div>
+  <div class="content">
+    <div class="card-grid">
+        <div class="card">             
+            <p class="card-title">Hostname   /   Version</p>
+            <p class ="card-text"><span id="0"></span></p>
+        </div>
+        <div class="card">             
+          <p class="card-title">MQTT last will topic</p>
+          <p class ="card-text"><span id="1"></span></p>
+        </div>
+        <div class="card">             
+          <p class="card-title">WiFi RSSI</p>
+          <p class ="card-text"><span id="2"></span></p>
+        </div>
+        <div class="card">             
+            <p class="card-title">Mqtt_sendInterval</p>
+            <p class ="card-text"><span id="3"></span></p>
+        </div>
+        <div class="card">             
+            <p class="card-title">SR04 - cm</p>
+            <p class ="card-text"><span id="4"></span></p>
+        </div>
+        <div class="card">
+          <p class="card-title">Unix timestamp</p>
+          <p class ="card-text"><span id="5"></span></p>
+        </div>
+        <div class="card">             
+          <p class="card-title">Number of Re-connects</p>
+          <p class ="card-text"><span id="6"></span></p>
+        </div>
+        <div class="card">
+          <p class="card-title">SR04_scanInterval</p>
+          <p class ="card-text"><span id="7"></span></p>
+          <input id="i7" class="card-text" type="number" min="100" max="500" required>
+          <button onclick="myFunction('7')">OK</button>
+          <p class ="card-text"><span id="m7">enter value 100 to 500</span></p>
+        </div>
+        <div class="card">
+          <p class="card-title">SR04 - min cm</p>
+          <p class ="card-text"><span id="8"></span></p>
+          <input id="i8" class="card-text" type="number" min="70" max="99" required>
+          <button onclick="myFunction('8')">OK</button>
+          <p class ="card-text"><span id="m8">enter value 70 to 99</span></p>
+        </div>
+        <div class="card">
+          <p class="card-title">SR04 - max cm</p>
+          <p class ="card-text"><span id="9"></span></p>
+          <input id="i9" class="card-text" type="number" min="100" max="130" required>
+          <button onclick="myFunction('9')">OK</button>
+          <p class ="card-text"><span id="m9">enter value 100 to 130</span></p>
+        </div>
+    </div>
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>
+
+
