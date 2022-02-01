@@ -68,7 +68,7 @@ String getOutputStates(){
   
   U_days = Up_time / 86400;
   U_hours = (Up_time % 86400) / 3600;
-  U_min = (Up_time & 3600) / 60;
+  U_min = (Up_time % 3600) / 60;
   U_sec = (Up_time % 60);
 
   myArray["cards"][0]["c_text"] = Hostname;
@@ -271,7 +271,7 @@ void setup() {
 }
 
 void loop() {
-  AsyncElegantOTA.loop();
+  
   ws.cleanupClients();
 
   // update UPCtime
