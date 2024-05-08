@@ -74,7 +74,7 @@ void reconnect_mqtt()
 
     mqttClient.publish(willTopic.c_str(), "Online", true, 0);
   
-    // mqttClient.subscribe(cmdTopic.c_str());  es werden keine MQTT-Messages empfangen
+    mqttClient.subscribe(cmdTopic.c_str());
   } else {
     log_i("Failed to connect to broker; error: %d\n", mqttClient.lastError());
     Mqtt_reconnect = Mqtt_reconnect + 1000;

@@ -172,6 +172,16 @@ void MQTTsend () {
   notifyClients(getOutputStates());
 }
 
+// receive MQTT messages
+void MQTT_callback(String &topic, String &payload) {
+  
+  log_i("%s","Message arrived on topic: ");
+  log_i("%s\n",topic);
+  log_i("%s","Data : ");
+  log_i("%s\n",payload);
+
+  notifyClients(getOutputStates());
+}
 //  function for SR04 scan
 void SR04_scan () {
   
@@ -234,6 +244,7 @@ void setup() {
 
   log_i("setup MQTT\n");
   initMQTT();
+  mqttClient.onMessage(MQTT_callback);
 
 
   //Define inputs and outputs fpr HC-SR04
