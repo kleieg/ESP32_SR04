@@ -216,9 +216,8 @@ void SR04_scan () {
     duration = pulseIn(echoPin, HIGH);
     SR04_cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
     if ( SR04_cm < SR04_cm_min or SR04_cm > SR04_cm_max) {
-      if (mqttClient.connected()) {
-        MQTTsend();
-      }
+      Mqtt_lastSend = 0;               // send immedately
+      SR04_lastScan = now + 10000;     // 10 sekunden kein Scan
     }
   }
   log_i("cm %d",SR04_cm);
