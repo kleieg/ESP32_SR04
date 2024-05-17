@@ -322,6 +322,8 @@ void loop() {
 
   // check if MQTT broker is still connected
   if (!mqttClient.connected()) {
+    // keinen scan ausführen
+    SR04_lastScan = now + 20000;
     // try reconnect every 5 seconds
     if (now - lastReconnectAttempt > 5000) {
       lastReconnectAttempt = now;
