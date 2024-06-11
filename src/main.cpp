@@ -182,6 +182,7 @@ void MQTT_callback(String &topic, String &payload) {
 
   notifyClients(getOutputStates());
 }
+
 //  function for SR04 scan
 void SR04_scan () {
   
@@ -202,6 +203,8 @@ void SR04_scan () {
   log_i("duration %d",duration);
   SR04_cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
 
+  SR04_time = My_time; 
+
   if ( SR04_cm < SR04_cm_min or SR04_cm > SR04_cm_max) {
     // movement my be recognized. Send data immediately.
     // to check do a second measurement
@@ -221,10 +224,6 @@ void SR04_scan () {
     }
   }
   log_i("cm %d",SR04_cm);
-
-  SR04_time = My_time;   
-
-  notifyClients(getOutputStates());
 }    
 
 
