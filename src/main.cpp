@@ -161,6 +161,8 @@ void MQTTsend () {
   mqtt_data["Time"] = My_time;
   mqtt_data["RSSI"] = WiFi.RSSI();
   mqtt_data["cm"] =SR04_cm;
+  mqtt_data["WIFIcon"] =WiFi_reconnect;
+  mqtt_data["MQTTcon"] =Mqtt_reconnect;
   mqtt_data["Time"] = SR04_time;
 
   String mqtt_string = JSON.stringify(mqtt_data);
@@ -192,7 +194,7 @@ void SR04_scan () {
   delayMicroseconds(2);   
   // Sets the trigPin on HIGH state for 10 micro seconds
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
+  delayMicroseconds(12);
   digitalWrite(trigPin, LOW);
   // Read the signal from the sensor: a HIGH pulse whose
   // duration is the time (in microseconds) from the sending
@@ -214,7 +216,7 @@ void SR04_scan () {
     delayMicroseconds(2);   
     // Sets the trigPin on HIGH state for 10 micro seconds
     digitalWrite(trigPin, HIGH);
-    delayMicroseconds(10);
+    delayMicroseconds(12);
     digitalWrite(trigPin, LOW);
     duration = pulseIn(echoPin, HIGH);
     SR04_cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
