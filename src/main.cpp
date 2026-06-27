@@ -191,10 +191,10 @@ void SR04_scan () {
   // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
   // Clears the trigPin
   digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);   
+  delayMicroseconds(4);   
   // Sets the trigPin on HIGH state for 10 micro seconds
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(12);
+  delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
   // Read the signal from the sensor: a HIGH pulse whose
   // duration is the time (in microseconds) from the sending
@@ -210,13 +210,13 @@ void SR04_scan () {
   if ( SR04_cm < SR04_cm_min or SR04_cm > SR04_cm_max) {
     // movement my be recognized. Send data immediately.
     // to check do a second measurement
-      delay(50);
+    delay(50);
     // Clears the trigPin
     digitalWrite(trigPin, LOW);
-    delayMicroseconds(2);   
+    delayMicroseconds(4);   
     // Sets the trigPin on HIGH state for 10 micro seconds
     digitalWrite(trigPin, HIGH);
-    delayMicroseconds(12);
+    delayMicroseconds(10);
     digitalWrite(trigPin, LOW);
     duration = pulseIn(echoPin, HIGH);
     SR04_cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343

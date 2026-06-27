@@ -1,7 +1,7 @@
 // set hostname used for MQTT tag and WiFi
 #define HOSTNAME "ESP-SR04"
 #define MQTT_BROKER "sym_mqtt"
-#define VERSION "v 6.1.0"
+#define VERSION "v 6.2.0"
 
 #define MQTT_INTERVAL 120000
 #define RECONNECT_INTERVAL 5000
