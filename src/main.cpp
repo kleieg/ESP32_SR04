@@ -251,7 +251,7 @@ void setup() {
   log_i("setup HC_SR04\n");
   pinMode(trigPin, OUTPUT);
   digitalWrite(trigPin, LOW);
-  pinMode(echoPin, INPUT);
+  pinMode(echoPin, INPUT_PULLDOWN);
 
 
   initSPIFFS();
