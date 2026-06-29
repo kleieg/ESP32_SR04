@@ -256,8 +256,6 @@ void setup() {
 }
 
 void loop() {
-  
-  ws.cleanupClients();
 
   now = millis();
   Up_time = now;
@@ -268,6 +266,8 @@ void loop() {
     SR04_scan();
   } 
 
+  ws.cleanupClients();
+  
   // check WiFi
   if (WiFi.status() != WL_CONNECTED  ) {
     // try reconnect every 5 seconds
