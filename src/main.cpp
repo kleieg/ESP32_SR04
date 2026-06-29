@@ -10,18 +10,14 @@
 #include "SPIFFS.h"
 #include <Arduino_JSON.h>
 #include <AsyncElegantOTA.h>
-#include <NTPClient.h>
 #include <WiFiUdp.h>
 
-#include "WLAN_Credentials_Shelly.h"
+//#include "WLAN_Credentials_Shelly.h"
+#include "WLAN_Credentials.h"
 #include "config.h"
 #include "wifi_mqtt.h"
 
-// NTP
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP);
-long My_time = 0;
-long Start_time;
+
 long Up_time;
 long U_days;
 long U_hours;
@@ -31,8 +27,6 @@ long U_sec;
 // Timers auxiliar variables
 long now = millis();
 char strtime[8];
-int LEDblink = 0;
-bool led = 1;
 
 
 // variables for HC-SR04
@@ -66,10 +60,10 @@ void initSPIFFS() {
 String getOutputStates(){
   JSONVar myArray;
   
-  U_days = Up_time / 86400;
-  U_hours = (Up_time % 86400) / 3600;
-  U_min = (Up_time % 3600) / 60;
-  U_sec = (Up_time % 60);
+  U_days = Up_time / 86400000;
+  U_hours = (Up_time % 86400000) / 3600000;
+  U_min = (Up_time % 3600000) / 60000;
+  U_sec = (Up_time % 60000) / 1000;
 
   myArray["cards"][0]["c_text"] = Hostname;
   myArray["cards"][1]["c_text"] = WiFi.dnsIP().toString() + "   /   " + String(VERSION);
@@ -158,7 +152,7 @@ void MQTTsend () {
   String mqtt_tag = Hostname + "/STATUS";
   log_i("%s\n", mqtt_tag.c_str());
   
-  mqtt_data["Time"] = My_time;
+  mqtt_data["Time"] = now;
   mqtt_data["RSSI"] = WiFi.RSSI();
   mqtt_data["cm"] =SR04_cm;
   mqtt_data["WIFIcon"] =WiFi_reconnect;
@@ -174,16 +168,6 @@ void MQTTsend () {
   notifyClients(getOutputStates());
 }
 
-// receive MQTT messages
-void MQTT_callback(String &topic, String &payload) {
-  
-  log_i("%s","Message arrived on topic: ");
-  log_i("%s\n",topic);
-  log_i("%s","Data : ");
-  log_i("%s\n",payload);
-
-  notifyClients(getOutputStates());
-}
 
 //  function for SR04 scan
 void SR04_scan () {
@@ -205,7 +189,7 @@ void SR04_scan () {
   log_i("duration %d",duration);
   SR04_cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
 
-  SR04_time = My_time; 
+  SR04_time = now; 
 
   if ( SR04_cm < SR04_cm_min or SR04_cm > SR04_cm_max) {
     // movement my be recognized. Send data immediately.
@@ -236,22 +220,17 @@ void setup() {
 
   log_i("setup device\n");
 
-  pinMode(GPIO_LED, OUTPUT);
-  digitalWrite(GPIO_LED,led);
-
   log_i("setup WiFi\n");
   initWiFi();
 
   log_i("setup MQTT\n");
   initMQTT();
-  mqttClient.onMessage(MQTT_callback);
-
 
   //Define inputs and outputs fpr HC-SR04
   log_i("setup HC_SR04\n");
   pinMode(trigPin, OUTPUT);
   digitalWrite(trigPin, LOW);
-  pinMode(echoPin, INPUT_PULLDOWN);
+  pinMode(echoPin, INPUT);
 
 
   initSPIFFS();
@@ -267,11 +246,6 @@ void setup() {
 
   Asynserver.serveStatic("/", SPIFFS, "/");
 
-  timeClient.begin();
-  timeClient.setTimeOffset(0);
-  // update UPCtime for Starttime
-  timeClient.update();
-  Start_time = timeClient.getEpochTime();
 
   // Start ElegantOTA
   AsyncElegantOTA.begin(&Asynserver);
@@ -285,24 +259,8 @@ void loop() {
   
   ws.cleanupClients();
 
-  // update UPCtime
-  timeClient.update();
-  My_time = timeClient.getEpochTime();
-  Up_time = My_time - Start_time;
-
   now = millis();
-
-  // LED blinken
-  if (now - LEDblink > 2000) {
-    LEDblink = now;
-    if(led == 0) {
-      digitalWrite(GPIO_LED, 1);
-      led = 1;
-    }else{
-      digitalWrite(GPIO_LED, 0);
-      led = 0;
-    }
-  }
+  Up_time = now;
 
   // perform SR04 scan
   if (now - SR04_lastScan > SR04_scanInterval) {
