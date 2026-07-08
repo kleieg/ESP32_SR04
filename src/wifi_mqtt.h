@@ -3,6 +3,7 @@
 
 // will be computed as "<HOSTNAME>_<MAC-ADDRESS>"
 String Hostname;
+String ssid_V;
 
 int WiFi_reconnect = 0;
 
@@ -24,9 +25,12 @@ void initWiFi() {
   Hostname += WiFi.macAddress();
   Hostname.replace(":", "");
 
+  ssid_V = ssid;
+  ssid_V = ssid_V + "V";  // SSID für Vorgarten
+
   WiFi.hostname(Hostname);
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid_V, password);
   log_i("Connecting to WiFi ..");
   while (WiFi.status() != WL_CONNECTED) {
     log_i(".");
