@@ -27,6 +27,7 @@ long U_sec;
 // Timers auxiliar variables
 long now = millis();
 char strtime[8];
+int last_connect_test;
 
 
 // variables for HC-SR04
@@ -268,36 +269,40 @@ void loop() {
 
   ws.cleanupClients();
   
-  // check WiFi
-  if (WiFi.status() != WL_CONNECTED  ) {
-    // try reconnect every 5 seconds
-    if (now - lastReconnectAttempt > 5000) {
-      lastReconnectAttempt = now;              // prevents mqtt reconnect running also
-      // Attempt to reconnect
-      reconnect_wifi();
+
+  if (now - last_connect_test > Connect_test) {
+    last_connect_test = now;
+      
+    // check WiFi
+    if (WiFi.status() != WL_CONNECTED  ) {
+      // try reconnect every 5 seconds
+      if (now - lastReconnectAttempt > 5000) {
+        lastReconnectAttempt = now;              // prevents mqtt reconnect running also
+        // Attempt to reconnect
+        reconnect_wifi();
+      }
     }
+
+    // check if MQTT broker is still connected
+    if (!mqttClient.connected()) {
+      // keinen scan ausführen
+      SR04_lastScan = now + 20000;
+      // try reconnect every 5 seconds
+      if (now - lastReconnectAttempt > 5000) {
+        lastReconnectAttempt = now;
+        // Attempt to reconnect
+        reconnect_mqtt();
+      }
+    } else {
+      // Client connected
+
+      mqttClient.loop();
+
+      // send data to MQTT broker
+      if (now - Mqtt_lastSend > MQTT_INTERVAL) {
+      Mqtt_lastSend = now;
+      MQTTsend();
+      } 
+    }   
   }
-
-
-  // check if MQTT broker is still connected
-  if (!mqttClient.connected()) {
-    // keinen scan ausführen
-    SR04_lastScan = now + 20000;
-    // try reconnect every 5 seconds
-    if (now - lastReconnectAttempt > 5000) {
-      lastReconnectAttempt = now;
-      // Attempt to reconnect
-      reconnect_mqtt();
-    }
-  } else {
-    // Client connected
-
-    mqttClient.loop();
-
-    // send data to MQTT broker
-    if (now - Mqtt_lastSend > MQTT_INTERVAL) {
-    Mqtt_lastSend = now;
-    MQTTsend();
-    } 
-  }   
 }
