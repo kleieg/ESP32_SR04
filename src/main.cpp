@@ -159,6 +159,7 @@ void MQTTsend () {
   mqtt_data["WIFIcon"] =WiFi_reconnect;
   mqtt_data["MQTTcon"] =Mqtt_reconnect;
   mqtt_data["Time"] = SR04_time;
+  mqtt_data["IP"] = WiFi.localIP().toString().c_str();
 
   String mqtt_string = JSON.stringify(mqtt_data);
 
