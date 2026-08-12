@@ -262,6 +262,8 @@ void loop() {
   now = millis();
   Up_time = now;
 
+  mqttClient.loop();
+
   // perform SR04 scan
   if (now - SR04_lastScan > SR04_scanInterval) {
     SR04_lastScan = now;
@@ -297,7 +299,7 @@ void loop() {
     } else {
       // Client connected
 
-      mqttClient.loop();
+      //mqttClient.loop();
 
       // send data to MQTT broker
       if (now - Mqtt_lastSend > MQTT_INTERVAL) {
